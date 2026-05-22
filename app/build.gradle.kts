@@ -54,4 +54,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.maps.compose)
     implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.datastore.preferences)
 }

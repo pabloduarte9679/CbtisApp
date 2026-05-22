@@ -14,6 +14,10 @@ import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,8 +32,14 @@ import com.example.cbtisapp.ui.theme.CbtisAppTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +61,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RoutesScreen() {
     val context = LocalContext.current
+    val themeManager = remember { ThemeManager(context) }
+    val scope = rememberCoroutineScope()
+    val isDarkMode by themeManager.isDarkModeFlow.collectAsState(initial = false)
 
     // 🚀 Controla el estado del permiso de ubicación
+
+    // 🎥 Define la posición inicial de la cámara apuntando al CBTis 122
+    val cbtis122 = LatLng(28.615472, -106.029222)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(cbtis122, 18f) // 16.5f es el nivel de zoom ideal para ver los edificios
+    }
+
     val locationPermissionState = rememberPermissionState(
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
@@ -67,7 +87,7 @@ fun RoutesScreen() {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = Color.White,
+                containerColor = if (isDarkMode) Color(0xFF1E1E1E) else Color.White,
                 tonalElevation = 8.dp,
             ) {
                 NavigationBarItem(
@@ -78,7 +98,7 @@ fun RoutesScreen() {
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF830122),
                         selectedTextColor = Color(0xFF830122),
-                        indicatorColor = Color(0xFFF8F9FA)
+                        indicatorColor = if (isDarkMode) Color(0xFF2D2D2D) else Color(0xFFE9ECEF)
                     )
                 )
                 NavigationBarItem(
@@ -128,7 +148,7 @@ fun RoutesScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(Color(0xFFF8F9FA))
+                .background(if (isDarkMode) Color(0xFF121212) else Color(0xFFF8F9FA))
         ) {
             // Barra superior optimizada
             Row(
@@ -155,6 +175,22 @@ fun RoutesScreen() {
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
+
+                //Botón de dark mode
+
+                IconButton(
+                    onClick = {
+                        scope.launch{
+                            themeManager.setDarkMode(!isDarkMode)
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
+                        contentDescription =  "Modo oscuro",
+                        tint = Color.White
+                    )
+                }
 
                 // Botón SOS funcional
                 Button(
@@ -189,7 +225,7 @@ fun RoutesScreen() {
                 Card(
                     modifier = Modifier.size(120.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = if (isDarkMode) Color(0xFF1E1E1E) else Color.White
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                     shape = RoundedCornerShape(16.dp)
@@ -213,7 +249,7 @@ fun RoutesScreen() {
                     text = "Rutas de Evacuación",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF830122)
+                    color = if (isDarkMode) Color(0xFFE63946) else Color(0xFF830122)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -221,7 +257,7 @@ fun RoutesScreen() {
                 Text(
                     text = "Rutas de evacuacion directas desde tu ubicacióm",
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = if (isDarkMode) Color.White.copy(alpha = 0.7f) else Color.Gray,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
@@ -233,15 +269,17 @@ fun RoutesScreen() {
                         .fillMaxWidth()
                         .height(240.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = if (isDarkMode) Color(0xFF1E1E1E) else Color.White
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                     shape = RoundedCornerShape(24.dp)
                 ) {
                     GoogleMap(
                         modifier = Modifier.fillMaxSize(),
+                        cameraPositionState = cameraPositionState,
                         properties = MapProperties(
-                            isMyLocationEnabled = locationPermissionState.status.isGranted
+                            isMyLocationEnabled = locationPermissionState.status.isGranted,
+                            mapStyleOptions = if (isDarkMode) MapStyleOptions(MapStyles.DARK_STYLE) else null
                         )
                     )
                 }
