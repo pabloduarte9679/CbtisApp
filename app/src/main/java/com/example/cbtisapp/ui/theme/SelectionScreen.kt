@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+//import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,17 +20,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.DarkMode
+//import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LightMode
+//import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.SportsBasketball
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+//import androidx.compose.material3.Button
+//import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+//import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,7 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cbtisapp.ThemeManager
-import kotlinx.coroutines.launch
+//import kotlinx.coroutines.launch
 
 
 data class Edificio(
@@ -102,7 +102,7 @@ fun EdificioItem(nombre: String, isDarkMode: Boolean, onClick: () -> Unit) {
 fun SelectionScreen(onEdificioSelected: (String) -> Unit) {
     val context = LocalContext.current
     val themeManager = remember { ThemeManager(context) }
-    val scope = rememberCoroutineScope()
+    //val scope = rememberCoroutineScope()
     val isDarkMode by themeManager.isDarkModeFlow.collectAsState(initial = false)
 
     val zonas = listOf(
@@ -129,14 +129,14 @@ fun SelectionScreen(onEdificioSelected: (String) -> Unit) {
             .background(if (isDarkMode) Color(0xFF121212) else Color(0xFFFDFDFD))
             .verticalScroll(rememberScrollState())
     ) {
-        HeaderSection(
+        /*HeaderSection(
             isDarkMode = isDarkMode,
             onToggleDarkMode = {
                 scope.launch {
                     themeManager.setDarkMode(!isDarkMode)
                 }
             }
-        )
+        ) */
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -162,7 +162,7 @@ fun SelectionScreen(onEdificioSelected: (String) -> Unit) {
     }
 }
 
-@Composable
+/*@Composable
 fun HeaderSection(isDarkMode: Boolean, onToggleDarkMode: () -> Unit) {
     Row(
         modifier = Modifier
@@ -201,7 +201,7 @@ fun HeaderSection(isDarkMode: Boolean, onToggleDarkMode: () -> Unit) {
         }
     }
 }
-
+*/
 @Composable
 fun ZonaSection(zona: ZonaEvacuacion, isDarkMode: Boolean, onEdificioSelected: (String) -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
