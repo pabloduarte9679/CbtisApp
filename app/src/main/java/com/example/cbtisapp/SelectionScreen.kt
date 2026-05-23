@@ -1,4 +1,4 @@
-package com.example.cbtisapp.ui.theme
+package com.example.cbtisapp
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 //import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 //import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.SportsBasketball
@@ -45,7 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cbtisapp.ThemeManager
+
 //import kotlinx.coroutines.launch
 
 
@@ -117,6 +118,11 @@ fun SelectionScreen(onEdificioSelected: (String) -> Unit) {
             "Punto de Reunión: Bicéfalo", Icons.Default.Groups, listOf(
                 Edificio("Electrónica", "EL"), Edificio("Edificio J", "J"),
                 Edificio("Cómputo", "CP"), Edificio("Edificio S", "S")
+            )
+        ),
+        ZonaEvacuacion(
+            puntoReunion = "Punto de Reunión: Caseta", Icons.Default.Home, edificios = listOf(
+                Edificio( nombre = "Edificio C", id = "C",), Edificio ( nombre = "Administrativo", id = "Ad")
             )
         )
     )

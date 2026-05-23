@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.example.cbtisapp.ui.theme.CbtisAppTheme
-import com.example.cbtisapp.ui.theme.SelectionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -43,9 +42,11 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
+// 1. 🧭 ACTUALIZACIÓN: Se agregó la pantalla Protocols al Enum de rutas disponibles
 enum class Screen {
     Home,
     MapSelection,
+    Protocols,
 }
 
 class MainActivity : ComponentActivity() {
@@ -57,7 +58,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Arrancamos directo con la estructura global fija
                     MainAppNavigation()
                 }
             }
@@ -73,10 +73,8 @@ fun MainAppNavigation() {
     val scope = rememberCoroutineScope()
     val isDarkMode by themeManager.isDarkModeFlow.collectAsState(initial = false)
 
-    // 🧭 ESTADOS DE NAVEGACIÓN COMPARTIDOS
     var currentScreen by remember { mutableStateOf(Screen.Home) }
 
-    // 🎥 CONFIGURACIÓN DE MAPA Y PERMISOS (Para que estén listos globalmente)
     val cbtis122 = LatLng(28.615472, -106.029222)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(cbtis122, 18f)
@@ -92,7 +90,6 @@ fun MainAppNavigation() {
         }
     }
 
-    // 🧱 EL SCAFFOLD FIJO: Envuelve a TODA la navegación interna
     Scaffold(
         bottomBar = {
             NavigationBar(
@@ -125,13 +122,22 @@ fun MainAppNavigation() {
                         unselectedTextColor = Color.Gray
                     )
                 )
+
+                // 2. 🧭 ACTUALIZACIÓN: Se activó el botón de "Protocols" en el menú inferior
                 NavigationBarItem(
-                    selected = false,
-                    onClick = { /* Navegación */ },
+                    selected = currentScreen == Screen.Protocols,
+                    onClick = { currentScreen = Screen.Protocols }, // Cambia de pantalla
                     label = { Text("Protocols", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Description, contentDescription = "Protocols") },
-                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF830122),
+                        selectedTextColor = Color(0xFF830122),
+                        indicatorColor = if (isDarkMode) Color(0xFF2D2D2D) else Color(0xFFE9ECEF),
+                        unselectedIconColor = Color.Gray,
+                        unselectedTextColor = Color.Gray
+                    )
                 )
+
                 NavigationBarItem(
                     selected = false,
                     onClick = { /* Navegación */ },
@@ -155,7 +161,7 @@ fun MainAppNavigation() {
                 .padding(innerPadding)
                 .background(if (isDarkMode) Color(0xFF121212) else Color(0xFFF8F9FA))
         ) {
-            // 🛑 BARRA SUPERIOR COMPARTIDA: Fija tanto en el mapa como en los edificios
+            // BARRA SUPERIOR COMPARTIDA
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -205,7 +211,7 @@ fun MainAppNavigation() {
                 }
             }
 
-            // 🔀 ESPACIO CENTRAL DINÁMICO (Aquí es donde ocurre el intercambio de pantallas)
+            // 🔀 ESPACIO CENTRAL DINÁMICO
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -213,7 +219,6 @@ fun MainAppNavigation() {
             ) {
                 when (currentScreen) {
                     Screen.Home -> {
-                        // Solo renderizamos los elementos del mapa institucional
                         RoutesScreenContent(
                             isDarkMode = isDarkMode,
                             cameraPositionState = cameraPositionState,
@@ -222,12 +227,15 @@ fun MainAppNavigation() {
                         )
                     }
                     Screen.MapSelection -> {
-                        // 🚀 Renderiza tu menú de edificios manteniendo las barras fijas arriba y abajo
                         SelectionScreen(
                             onEdificioSelected = {
                                 currentScreen = Screen.Home
                             }
                         )
+                    }
+                    // 3. 🧭 ACTUALIZACIÓN: Agregada la llamada al Composable de tu nueva pantalla
+                    Screen.Protocols -> {
+                        ProtocolsScreen()
                     }
                 }
             }
@@ -235,7 +243,6 @@ fun MainAppNavigation() {
     }
 }
 
-// 🎨 Componente limpio que contiene el cuerpo original tuyo (Logo DGETI + Mini Mapa + Botón Rutas)
 @Composable
 fun RoutesScreenContent(
     isDarkMode: Boolean,
