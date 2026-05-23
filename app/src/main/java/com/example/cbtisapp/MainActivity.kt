@@ -75,7 +75,6 @@ fun MainAppNavigation() {
 
     // 🧭 ESTADOS DE NAVEGACIÓN COMPARTIDOS
     var currentScreen by remember { mutableStateOf(Screen.Home) }
-    var seleccionadoEdificioId by remember { mutableStateOf("") }
 
     // 🎥 CONFIGURACIÓN DE MAPA Y PERMISOS (Para que estén listos globalmente)
     val cbtis122 = LatLng(28.615472, -106.029222)
@@ -225,8 +224,7 @@ fun MainAppNavigation() {
                     Screen.MapSelection -> {
                         // 🚀 Renderiza tu menú de edificios manteniendo las barras fijas arriba y abajo
                         SelectionScreen(
-                            onEdificioSelected = { id ->
-                                seleccionadoEdificioId = id
+                            onEdificioSelected = {
                                 currentScreen = Screen.Home
                             }
                         )
