@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -95,6 +96,8 @@ fun MainAppNavigation() {
             NavigationBar(
                 containerColor = if (isDarkMode) Color(0xFF1E1E1E) else Color.White,
                 tonalElevation = 8.dp,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(2.dp))
             ) {
                 NavigationBarItem(
                     selected = currentScreen == Screen.Home,
@@ -194,7 +197,7 @@ fun MainAppNavigation() {
                 ) {
                     Icon(
                         imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                        contentDescription = "Modo oscuro",
+                        contentDescription = "Modo Natalia",
                         tint = Color.White
                     )
                 }
