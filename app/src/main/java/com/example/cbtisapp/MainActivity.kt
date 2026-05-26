@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import com.example.cbtisapp.ui.theme.CbtisAppTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -75,6 +76,7 @@ fun MainAppNavigation() {
     val isDarkMode by themeManager.isDarkModeFlow.collectAsState(initial = false)
 
     var currentScreen by remember { mutableStateOf(Screen.Home) }
+    var showCredits by remember { mutableStateOf(false) }
 
     val cbtis122 = LatLng(28.615472, -106.029222)
     val cameraPositionState = rememberCameraPositionState {
@@ -142,21 +144,28 @@ fun MainAppNavigation() {
 
                 NavigationBarItem(
                     selected = currentScreen == Screen.Contacts,
-                    onClick = { currentScreen = Screen.Contacts},
+                    onClick = { currentScreen = Screen.Contacts },
                     label = { Text("Contactos", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.ContactPhone, contentDescription = "Contacts") },
-                    colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
+                    colors = NavigationBarItemDefaults.colors(
+                        unselectedIconColor = Color.Gray,
+                        unselectedTextColor = Color.Gray
+                    )
                 )
-                NavigationBarItem(
+                /*NavigationBarItem(
                     selected = false,
                     onClick = { /* Navigation */ },
                     label = { Text("Alertas", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Notifications, contentDescription = "Alerts") },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
-                )
+                )*/
             }
         }
     ) { innerPadding ->
+        if (showCredits) {
+            CreditsBubble(isDarkMode = isDarkMode, onDismiss = { showCredits = false })
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -170,12 +179,14 @@ fun MainAppNavigation() {
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Shield,
-                    contentDescription = "Safe Icon",
-                    tint = Color.Red,
-                    modifier = Modifier.size(24.dp)
-                )
+                IconButton(onClick = { showCredits = true }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Shield,
+                        contentDescription = "Safe Icon",
+                        tint = Color.Red,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(8.dp))
 
@@ -205,7 +216,10 @@ fun MainAppNavigation() {
                         val intent = Intent(Intent.ACTION_DIAL).apply { data = "tel:911".toUri() }
                         context.startActivity(intent)
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red, contentColor = Color.White),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    ),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(text = "SOS", fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
@@ -226,6 +240,7 @@ fun MainAppNavigation() {
                             onNavigateToSelection = { currentScreen = Screen.MapSelection }
                         )
                     }
+
                     Screen.MapSelection -> {
                         SelectionScreen(
                             onEdificioSelected = {
@@ -233,6 +248,7 @@ fun MainAppNavigation() {
                             }
                         )
                     }
+
                     Screen.Protocols -> {
                         ProtocolsScreen()
                     }
@@ -341,6 +357,58 @@ fun RoutesScreenContent(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
+        }
+    }
+}
+
+@Composable
+fun CreditsBubble(isDarkMode: Boolean, onDismiss: () -> Unit) {
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isDarkMode) Color(0xFF1E1E1E) else Color.White
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            shape = RoundedCornerShape(24.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Stars,
+                    contentDescription = null,
+                    tint = Color(0xFFFFD700),
+                    modifier = Modifier.size(48.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Tono",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = if (isDarkMode) Color.White else Color.Black
+                )
+                Text(
+                    text = "best developer of the world forever and ever " +
+                            "y pablo vale pa pura madre",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = if (isDarkMode) Color.White.copy(alpha = 0.7f) else Color.Gray,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = onDismiss,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF830122))
+                ) {
+                    Text("Cerrar")
+                }
+            }
         }
     }
 }
