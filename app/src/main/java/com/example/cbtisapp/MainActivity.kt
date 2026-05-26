@@ -102,7 +102,7 @@ fun MainAppNavigation() {
                 NavigationBarItem(
                     selected = currentScreen == Screen.Home,
                     onClick = { currentScreen = Screen.Home },
-                    label = { Text("Home", fontSize = 12.sp) },
+                    label = { Text("Inicio", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF830122),
@@ -115,7 +115,7 @@ fun MainAppNavigation() {
                 NavigationBarItem(
                     selected = currentScreen == Screen.MapSelection,
                     onClick = { currentScreen = Screen.MapSelection },
-                    label = { Text("Routes", fontSize = 12.sp) },
+                    label = { Text("Rutas", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Map, contentDescription = "Routes") },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF830122),
@@ -129,7 +129,7 @@ fun MainAppNavigation() {
                 NavigationBarItem(
                     selected = currentScreen == Screen.Protocols,
                     onClick = { currentScreen = Screen.Protocols },
-                    label = { Text("Protocols", fontSize = 12.sp) },
+                    label = { Text("Protocolos", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Description, contentDescription = "Protocols") },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color(0xFF830122),
@@ -143,14 +143,14 @@ fun MainAppNavigation() {
                 NavigationBarItem(
                     selected = currentScreen == Screen.Contacts,
                     onClick = { currentScreen = Screen.Contacts},
-                    label = { Text("Contacts", fontSize = 12.sp) },
+                    label = { Text("Contactos", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.ContactPhone, contentDescription = "Contacts") },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { /* Navigation */ },
-                    label = { Text("Alerts", fontSize = 12.sp) },
+                    label = { Text("Alertas", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Notifications, contentDescription = "Alerts") },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
                 )
