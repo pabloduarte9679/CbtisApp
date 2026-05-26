@@ -394,8 +394,8 @@ fun CreditsBubble(isDarkMode: Boolean, onDismiss: () -> Unit) {
                     color = if (isDarkMode) Color.White else Color.Black
                 )
                 Text(
-                    text = "best developer of the world forever and ever " +
-                            "y pablo vale pa pura madre",
+                    text = "actually the best in the fucking world is other than Pablo,
+                    any other developer you might know such as Tono are dumb",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     color = if (isDarkMode) Color.White.copy(alpha = 0.7f) else Color.Gray,
