@@ -19,11 +19,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,16 +31,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cbtisapp.ThemeManager
 
 data class Protocol(
     val type: String,
@@ -64,7 +60,6 @@ fun ProtocolItem(protocol: Protocol, isDarkMode: Boolean) {
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // 🎯 Se agregó contentAlignment para centrar el icono en el círculo
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -124,7 +119,7 @@ fun ProtocolsScreen() {
         Protocol(
             type = "Terremoto",
             icono = Icons.Default.Warning,
-            colorAcento = Color(0xFF005691),
+            colorAcento = Color(0xFF915700),
             actions = listOf(
                 "Agáchese, cúbrase debajo de una mesa y sujétese.",
                 "Aléjese de ventanas, estanterías y objetos colgantes.",
@@ -134,11 +129,21 @@ fun ProtocolsScreen() {
         Protocol(
             type = "Tiroteo Activo",
             icono = Icons.Default.Shield,
-            colorAcento = Color(0xFFB30000),
+            colorAcento = Color(0xFF4F4646),
             actions = listOf(
                 "Corra si hay una ruta de escape segura disponible.",
                 "Escóndase en un lugar seguro, bloquee puertas y silencie móviles.",
                 "Luche solo como último recurso si su vida corre peligro."
+            )
+        ),
+        Protocol(
+            type = "Inundación",
+            icono = Icons.Default.WaterDrop,
+            colorAcento = Color(0xFF0048B3),
+            actions = listOf(
+                "Suba inmediatamente a las plantas superiores del plantel.",
+                "Aléjese de zonas inundadas, cables y registros eléctricos.",
+                "No intente cruzar corrientes de agua a pie ni en vehículo."
             )
         )
     )
@@ -167,13 +172,12 @@ fun ProtocolsScreen() {
 
         Spacer(Modifier.height(20.dp))
 
-        // 🎯 Corrección: Se eliminó el bucle duplicado
         protocolsList.forEach { item ->
             ProtocolItem(protocol = item, isDarkMode = isDarkMode)
             Spacer(Modifier.height(16.dp))
         }
 
-        /* 🏢 COMENTADO POR EL MOMENTO: Banner de "CAMPUS SEGURO"
+        /*
         Box(
             modifier = Modifier
                 .fillMaxWidth()

@@ -43,11 +43,11 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
-// 1. 🧭 ACTUALIZACIÓN: Se agregó la pantalla Protocols al Enum de rutas disponibles
 enum class Screen {
     Home,
     MapSelection,
     Protocols,
+    Contacts,
 }
 
 class MainActivity : ComponentActivity() {
@@ -126,10 +126,9 @@ fun MainAppNavigation() {
                     )
                 )
 
-                // 2. 🧭 ACTUALIZACIÓN: Se activó el botón de "Protocols" en el menú inferior
                 NavigationBarItem(
                     selected = currentScreen == Screen.Protocols,
-                    onClick = { currentScreen = Screen.Protocols }, // Cambia de pantalla
+                    onClick = { currentScreen = Screen.Protocols },
                     label = { Text("Protocols", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Description, contentDescription = "Protocols") },
                     colors = NavigationBarItemDefaults.colors(
@@ -142,15 +141,15 @@ fun MainAppNavigation() {
                 )
 
                 NavigationBarItem(
-                    selected = false,
-                    onClick = { /* Navegación */ },
+                    selected = currentScreen == Screen.Contacts,
+                    onClick = { currentScreen = Screen.Contacts},
                     label = { Text("Contacts", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.ContactPhone, contentDescription = "Contacts") },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { /* Navegación */ },
+                    onClick = { /* Navigation */ },
                     label = { Text("Alerts", fontSize = 12.sp) },
                     icon = { Icon(Icons.Default.Notifications, contentDescription = "Alerts") },
                     colors = NavigationBarItemDefaults.colors(unselectedIconColor = Color.Gray, unselectedTextColor = Color.Gray)
@@ -164,7 +163,6 @@ fun MainAppNavigation() {
                 .padding(innerPadding)
                 .background(if (isDarkMode) Color(0xFF121212) else Color(0xFFF8F9FA))
         ) {
-            // BARRA SUPERIOR COMPARTIDA
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -197,7 +195,7 @@ fun MainAppNavigation() {
                 ) {
                     Icon(
                         imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                        contentDescription = "Modo Natalia",
+                        contentDescription = "Theme Toggle",
                         tint = Color.White
                     )
                 }
@@ -214,7 +212,6 @@ fun MainAppNavigation() {
                 }
             }
 
-            // 🔀 ESPACIO CENTRAL DINÁMICO
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -236,9 +233,12 @@ fun MainAppNavigation() {
                             }
                         )
                     }
-                    // 3. 🧭 ACTUALIZACIÓN: Agregada la llamada al Composable de tu nueva pantalla
                     Screen.Protocols -> {
                         ProtocolsScreen()
+                    }
+
+                    Screen.Contacts -> {
+                        ContactsScreen()
                     }
                 }
             }
